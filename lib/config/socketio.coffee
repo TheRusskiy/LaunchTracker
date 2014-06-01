@@ -8,10 +8,10 @@ randomIntBetween = (min,max)->
   return Math.floor(Math.random()*(max-min+1)+min)
 
 module.exports = (io) ->
-
   io.configure ->
     io.set('log level', config.socketio.log_level)
-
+    io.set("transports", ["xhr-polling"]); 
+    io.set("polling duration", 10); 
     io.set "authorization", (handshakeData, accept) ->
 
       # Check whether cookies were passed
