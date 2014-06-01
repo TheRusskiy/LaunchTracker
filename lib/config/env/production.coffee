@@ -6,4 +6,4 @@ module.exports =
     log_level: 1
 
   mongo:
-    uri: process.env.MONGOLAB_URI or process.env.MONGOHQ_URL or "mongodb://localhost/launch_tracker_production"
+    uri: "mongodb://therusskiy:w0rdpazz@kahana.mongohq.com:10072/launch_tracker" or "mongodb://localhost/launch_tracker_production"
