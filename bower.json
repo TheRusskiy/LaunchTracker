@@ -1,5 +1,5 @@
 {
-  "name": "node-radio",
+  "name": "launch-tracker",
   "version": "0.0.0",
   "dependencies": {
     "angular": "1.2.15",
