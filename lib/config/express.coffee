@@ -31,7 +31,7 @@ module.exports = (app) ->
     app.set "views", config.root + "/app/views"
 
   app.configure "production", ->
-    app.use express.favicon(path.join(config.root, "public", "favicon.ico"))
+    # app.use express.favicon(path.join(config.root, "public", "favicon.ico"))
     app.use express.static(path.join(config.root, "public"))
     app.set "views", config.root + "/views"
 
