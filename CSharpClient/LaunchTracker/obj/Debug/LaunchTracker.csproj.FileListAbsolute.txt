@@ -1,0 +1,10 @@
+c:\users\therusskiy\documents\visual studio 2012\Projects\MicronApplicationSpy\MicronApplicationSpy\bin\Debug\spy-config.txt
+c:\users\therusskiy\documents\visual studio 2012\Projects\MicronApplicationSpy\MicronApplicationSpy\bin\Debug\LaunchTracker.exe.config
+c:\users\therusskiy\documents\visual studio 2012\Projects\MicronApplicationSpy\MicronApplicationSpy\bin\Debug\LaunchTracker.exe
+c:\users\therusskiy\documents\visual studio 2012\Projects\MicronApplicationSpy\MicronApplicationSpy\bin\Debug\LaunchTracker.pdb
+c:\users\therusskiy\documents\visual studio 2012\Projects\MicronApplicationSpy\MicronApplicationSpy\obj\Debug\LaunchTracker.csprojResolveAssemblyReference.cache
+c:\users\therusskiy\documents\visual studio 2012\Projects\MicronApplicationSpy\MicronApplicationSpy\obj\Debug\LaunchTracker.exe
+c:\users\therusskiy\documents\visual studio 2012\Projects\MicronApplicationSpy\MicronApplicationSpy\obj\Debug\LaunchTracker.pdb
+C:\Users\TheRusskiy\Documents\Visual Studio 2012\Projects\MicronApplicationSpy\LaunchTracker\bin\Debug\LaunchTracker.exe.config
+C:\Users\TheRusskiy\Documents\Visual Studio 2012\Projects\MicronApplicationSpy\LaunchTracker\obj\Debug\LaunchTracker.exe
+C:\Users\TheRusskiy\Documents\Visual Studio 2012\Projects\MicronApplicationSpy\LaunchTracker\obj\Debug\LaunchTracker.pdb

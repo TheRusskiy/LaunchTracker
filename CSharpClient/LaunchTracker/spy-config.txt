@@ -1,0 +1,6 @@
+﻿dmitry_pc
+sublime_text
+# debug
+# first line is a name of your machine
+# second line is a name of a process (actually it's a part of a name, extension is omitted)
+# to launch it in a debug mode and check whether it can capture specified process uncomment "debug" line 
