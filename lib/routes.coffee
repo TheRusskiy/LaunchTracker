@@ -2,6 +2,7 @@
 index = require("./controllers")
 users = require("./controllers/users")
 session = require("./controllers/session")
+launches = require("./controllers/launches")
 api = require("./controllers/api")
 middleware = require("./middleware")
 auth = require("./auth")
@@ -38,6 +39,7 @@ module.exports = (app) ->
 #  app.del "/api/conferences/:id", conferences.delete
 #  app.put "/api/conferences/:id", conferences.update
 
+  app.get "/launches", launches.index
   # All other routes to use Angular routing in app/scripts/app.js
   app.get "/partials/*", index.partials
   app.get "/*", index.index

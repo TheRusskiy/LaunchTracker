@@ -10,13 +10,15 @@ exports.application_launched = (callback)->
     launch = new Launch({
       machine: machine
       application: application
-      started_at: Date.now
+      started_at: new Date
       })
     console.log req.body
     launch.save (err) ->
       if err
-        if err then console.log err
+        console.log err
+        res.json 500, err
       callback(launch.toObject())
+      res.send(204)
 
 exports.application_closed = (callback)->
   (req, res, next) ->
@@ -25,7 +27,7 @@ exports.application_closed = (callback)->
     newUser = new Launch({
       machine: machine
       application: application
-      started_at: Date.now()
+      started_at: new Date
       })
     console.log req.body
 
@@ -36,6 +38,9 @@ exports.application_closed = (callback)->
         last = launches[0]
         last.closed_at = Date.now()
         last.save (err)->
-          console.log err
+          if err
+            console.log err
+            res.json 500, err
+          res.send(204)
           callback(last.toObject())
       );

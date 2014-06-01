@@ -6,5 +6,5 @@ module.exports = {
     log_level: 2
 
   mongo:
-    uri: "mongodb://localhost/launch_tracker-dev"
+    uri: "mongodb://localhost/launch_tracker_dev"
 }
