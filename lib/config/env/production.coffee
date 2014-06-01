@@ -1,7 +1,7 @@
 "use strict"
 module.exports =
   env: "production"
-  host: "launch_tracker.herokuapp.com"
+  host: "launch-tracker.herokuapp.com"
   socketio:
     log_level: 1
 

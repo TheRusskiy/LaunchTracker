@@ -24,7 +24,6 @@ module.exports = (app) ->
         res.header "Pragma", "no-cache"
         res.header "Expires", 0
       next()
-
     app.use express.static(path.join(config.root, ".tmp"))
     app.use express.static(path.join(config.root, "app"))
     app.use express.errorHandler()
@@ -36,7 +35,7 @@ module.exports = (app) ->
     # app.set "views", config.root + "/views"
     app.use express.static(path.join(config.root, ".tmp"))
     app.use express.static(path.join(config.root, "app"))
-    
+
     app.set "views", config.root + "/app/views"
 
   app.configure ->
