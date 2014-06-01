@@ -24,19 +24,14 @@ exports.application_closed = (callback)->
   (req, res, next) ->
     machine = req.body.machine
     application = req.body.application
-    newUser = new Launch({
-      machine: machine
-      application: application
-      started_at: new Date
-      })
-    console.log req.body
 
     Launch
       .find({ machine: machine, closed_at: null })
       .sort('-started_at')
       .exec((err, launches)->
+        console.log launches
         last = launches[0]
-        last.closed_at = Date.now()
+        last.finished_at = new Date
         last.save (err)->
           if err
             console.log err

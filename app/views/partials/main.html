@@ -1,5 +1,24 @@
-<ul>
-	<li ng-repeat="launch in launches">
-		{{launch}}
-	</li>
-</ul>
+<div class="container">
+<div class="col-md-12">
+<table class="table table-hover">
+      <thead>
+        <tr>
+          <th>Machine</th>
+          <th>Application</th>
+          <th>Started at</th>
+          <th>Finished at</th>
+          <th>Duration</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="launch in launches">
+          <td>{{launch.machine}}</td>
+          <td>{{launch.application}}</td>
+          <td>{{format_date(launch.started_at)}}</td>
+          <td>{{format_date(launch.finished_at)}}</td>
+          <td>{{time_difference(launch.started_at, launch.finished_at)}}</td>
+        </tr>
+      </tbody>
+    </table>
+</div>
+</div>
