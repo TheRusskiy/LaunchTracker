@@ -1,0 +1,2 @@
+./node_modules/bower/bin/bower install
+coffee ./app/scripts
