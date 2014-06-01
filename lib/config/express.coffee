@@ -33,7 +33,11 @@ module.exports = (app) ->
   app.configure "production", ->
     # app.use express.favicon(path.join(config.root, "public", "favicon.ico"))
     app.use express.static(path.join(config.root, "public"))
-    app.set "views", config.root + "/views"
+    # app.set "views", config.root + "/views"
+    app.use express.static(path.join(config.root, ".tmp"))
+    app.use express.static(path.join(config.root, "app"))
+    
+    app.set "views", config.root + "/app/views"
 
   app.configure ->
     app.engine "html", require("ejs").renderFile
