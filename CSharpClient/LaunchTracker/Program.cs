@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Mime;
@@ -98,7 +99,7 @@ namespace MicronApplicationSpy
         static void stopWatch_EventArrived(object sender, EventArrivedEventArgs e)
         {
             string processName = (string)e.NewEvent.Properties["ProcessName"].Value;
-            Console.WriteLine("Process stopped: {0}", processName);
+            Log("Process stopped: "+ processName);
             foreach (var application in applications)
             {
                 Match match = Regex.Match(processName, @"" + application, RegexOptions.IgnoreCase);
@@ -118,13 +119,13 @@ namespace MicronApplicationSpy
         static void startWatch_EventArrived(object sender, EventArrivedEventArgs e)
         {
             string processName = (string) e.NewEvent.Properties["ProcessName"].Value;
-            Console.WriteLine("Process started: {0}", processName);
+            Log("Process started: "+processName);
             foreach (var application in applications)
             {
                 Match match = Regex.Match(processName, @"" + application, RegexOptions.IgnoreCase);
                 if (match.Success)
                 {
-                    Console.WriteLine("Right process started!");
+                    Log("***Right process started!***");
                     var data = new NameValueCollection();
                     data["action"] = "application_launched";
                     data["machine"] = machine;
@@ -145,12 +146,13 @@ namespace MicronApplicationSpy
                     try
                     {
                         var response = wb.UploadValues("https://launch-tracker.herokuapp.com/api/" + data["action"], "POST", data);
+                        Log("Sent to server: "+data.ToString());
                         success = true;
                     }
                     catch (WebException e)
                     {
-                        Console.WriteLine("\nERROR: " + e.Message);
-                        Console.WriteLine("STATUS: " + e.Status);
+                        Log("\nERROR: " + e.Message);
+                        Log("STATUS: " + e.Status);
                         sendQueue.Add(data);
                     }
                 }
@@ -167,6 +169,7 @@ namespace MicronApplicationSpy
 
         static void mnuExit_Click(object sender, EventArgs e)
         {
+            Log("Closing...");
             notificationIcon.Dispose();
             startWatch.Stop();
             stopWatch.Stop();
@@ -192,7 +195,10 @@ namespace MicronApplicationSpy
         }
         static void Log(String text)
         {
-            
+            using (StreamWriter sw = File.AppendText("log.txt"))
+            {
+                sw.WriteLine(NowString()+"\n"+text);
+            }	
         }
     }
 }
