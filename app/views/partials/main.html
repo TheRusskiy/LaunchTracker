@@ -11,7 +11,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr ng-repeat="launch in launches">
+        <tr ng-repeat="launch in launches | orderBy: '-started_at'">
           <td>{{launch.machine}}</td>
           <td>{{launch.application}}</td>
           <td>{{format_date(launch.started_at)}}</td>

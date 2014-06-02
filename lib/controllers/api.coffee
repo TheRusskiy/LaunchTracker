@@ -7,10 +7,12 @@ exports.application_launched = (callback)->
   (req, res, next) ->
     machine = req.body.machine
     application = req.body.application
+    time = req.body.time
+
     launch = new Launch({
       machine: machine
       application: application
-      started_at: new Date
+      started_at: new Date(time)
       })
     console.log req.body
     launch.save (err) ->
@@ -24,6 +26,7 @@ exports.application_closed = (callback)->
   (req, res, next) ->
     machine = req.body.machine
     application = req.body.application
+    time = req.body.time
 
     Launch
       .find({ machine: machine, closed_at: null })
@@ -31,7 +34,7 @@ exports.application_closed = (callback)->
       .exec((err, launches)->
         console.log launches
         last = launches[0]
-        last.finished_at = new Date
+        last.finished_at = new Date(time)
         last.save (err)->
           if err
             console.log err
