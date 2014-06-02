@@ -55,7 +55,7 @@ namespace MicronApplicationSpy
                       notificationIcon.Icon = new Icon(SystemIcons.Information, 40, 40);
                       notificationIcon.ContextMenu = menu;
 
-                      notificationIcon.Visible = true;
+                      notificationIcon.Visible = !debug;
                       Application.Run();
                   }
               );
