@@ -55,7 +55,7 @@ namespace MicronApplicationSpy
                       notificationIcon.Icon = new Icon(SystemIcons.Information, 40, 40);
                       notificationIcon.ContextMenu = menu;
 
-                      notificationIcon.Visible = !debug;
+                      notificationIcon.Visible = debug;
                       Application.Run();
                   }
               );
@@ -189,6 +189,10 @@ namespace MicronApplicationSpy
                 notificationIcon.Text = "Launch Tracker: No Network!";
                 return false;
             }
+        }
+        static void Log(String text)
+        {
+            
         }
     }
 }
