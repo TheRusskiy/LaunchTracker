@@ -19,6 +19,7 @@ namespace MicronApplicationSpy
     {
         private static string machine = null;
         private static List<string> applications = new List<string>();
+        private static List<NameValueCollection> sendQueue = new List<NameValueCollection>();
         private static bool debug = false;
         public static ContextMenu menu;
         public static MenuItem mnuExit;
@@ -50,12 +51,32 @@ namespace MicronApplicationSpy
                       mnuExit.Click += new EventHandler(mnuExit_Click);
 
                       notificationIcon = new NotifyIcon();
-                      notificationIcon.Text = "LaunchTracker";
-                      notificationIcon.Icon = new Icon(SystemIcons.Application, 40, 40);
+                      notificationIcon.Text = "Launch Tracker";
+                      notificationIcon.Icon = new Icon(SystemIcons.Information, 40, 40);
                       notificationIcon.ContextMenu = menu;
 
                       notificationIcon.Visible = true;
                       Application.Run();
+                  }
+              );
+            Thread senderThread = new Thread(
+                  delegate()
+                  {
+                      while (true)
+                      {
+                          Thread.Sleep(200);
+                          CheckNetwork();
+                          NameValueCollection data = null;
+                          while (sendQueue.Count > 0)
+                          {
+                              data = sendQueue.First();
+                              sendQueue.Remove(data);
+                              if (!NotifyService(data))
+                              {
+                                  break;
+                              }
+                          }
+                      }
                   }
               );
             
@@ -67,9 +88,13 @@ namespace MicronApplicationSpy
             stopWatch.Start();
 
             notifyThread.Start();
+            senderThread.IsBackground = true;
+            senderThread.Start();
+            CheckNetwork();
             Console.ReadLine();  
             
         }
+
         static void stopWatch_EventArrived(object sender, EventArrivedEventArgs e)
         {
             string processName = (string)e.NewEvent.Properties["ProcessName"].Value;
@@ -80,17 +105,12 @@ namespace MicronApplicationSpy
                 if (match.Success)
                 {
                     Console.WriteLine("***Right process stopped!***");
-                    using (var wb = new WebClient())
-                    {
-                        var data = new NameValueCollection();
-                        data["machine"] = machine;
-                        data["application"] = application;
-                        data["time"] = NowString();
-                        if (!debug)
-                        {
-                            var response = wb.UploadValues("https://launch-tracker.herokuapp.com/api/application_closed", "POST", data);                            
-                        }
-                    }
+                    var data = new NameValueCollection();
+                    data["action"] = "application_closed";
+                    data["machine"] = machine;
+                    data["application"] = application;
+                    data["time"] = NowString();
+                    NotifyService(data);
                 }
             }
         }
@@ -105,20 +125,39 @@ namespace MicronApplicationSpy
                 if (match.Success)
                 {
                     Console.WriteLine("Right process started!");
-                    using (var wb = new WebClient())
-                    {
-                        var data = new NameValueCollection();
-                        data["machine"] = machine;
-                        data["application"] = application;
-                        data["time"] = NowString();
-                        if (!debug)
-                        {
-                            var response = wb.UploadValues("https://launch-tracker.herokuapp.com/api/application_launched", "POST", data);
-                        }
-                    }
+                    var data = new NameValueCollection();
+                    data["action"] = "application_launched";
+                    data["machine"] = machine;
+                    data["application"] = application;
+                    data["time"] = NowString();
+                    NotifyService(data);
                 }
             }
         }
+
+        static bool NotifyService(NameValueCollection data)
+        {
+            bool success = false;
+            using (var wb = new WebClient())
+            {
+                if (!debug)
+                {
+                    try
+                    {
+                        var response = wb.UploadValues("https://launch-tracker.herokuapp.com/api/" + data["action"], "POST", data);
+                        success = true;
+                    }
+                    catch (WebException e)
+                    {
+                        Console.WriteLine("\nERROR: " + e.Message);
+                        Console.WriteLine("STATUS: " + e.Status);
+                        sendQueue.Add(data);
+                    }
+                }
+            }
+            return success;
+        }
+
         static string NowString() 
         {
             DateTime now = DateTime.UtcNow;
@@ -132,6 +171,24 @@ namespace MicronApplicationSpy
             startWatch.Stop();
             stopWatch.Stop();
             Application.Exit();
+        }
+
+        static bool CheckNetwork()
+        {
+            if (System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable())
+            {
+                var newIcon = new Icon(SystemIcons.Information, 40, 40);
+                notificationIcon.Icon = newIcon;
+                notificationIcon.Text = "Launch Tracker";
+                return true;
+            }
+            else
+            {
+                var newIcon = new Icon(SystemIcons.Exclamation, 40, 40);
+                notificationIcon.Icon = newIcon;
+                notificationIcon.Text = "Launch Tracker: No Network!";
+                return false;
+            }
         }
     }
 }
