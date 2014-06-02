@@ -54,16 +54,15 @@ namespace MicronApplicationSpy
                 if (match.Success)
                 {
                     Console.WriteLine("***Right process stopped!***");
-                }
-                if (match.Success && !debug)
-                {
                     using (var wb = new WebClient())
                     {
                         var data = new NameValueCollection();
                         data["machine"] = machine;
                         data["application"] = application;
-
-                        var response = wb.UploadValues("https://launch-tracker.herokuapp.com/api/application_closed", "POST", data);
+                        if (!debug)
+                        {
+                            var response = wb.UploadValues("https://launch-tracker.herokuapp.com/api/application_closed", "POST", data);                            
+                        }
                     }
                 }
             }
@@ -79,16 +78,15 @@ namespace MicronApplicationSpy
                 if (match.Success)
                 {
                     Console.WriteLine("Right process started!");
-                }
-                if (match.Success && !debug)
-                {
                     using (var wb = new WebClient())
                     {
                         var data = new NameValueCollection();
                         data["machine"] = machine;
                         data["application"] = application;
-
-                        var response = wb.UploadValues("https://launch-tracker.herokuapp.com/api/application_launched", "POST", data);
+                        if (!debug)
+                        {
+                            var response = wb.UploadValues("https://launch-tracker.herokuapp.com/api/application_launched", "POST", data);
+                        }
                     }
                 }
             }
