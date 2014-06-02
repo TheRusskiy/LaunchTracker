@@ -8,3 +8,13 @@ c:\users\therusskiy\documents\visual studio 2012\Projects\MicronApplicationSpy\M
 C:\Users\TheRusskiy\Documents\Visual Studio 2012\Projects\MicronApplicationSpy\LaunchTracker\bin\Debug\LaunchTracker.exe.config
 C:\Users\TheRusskiy\Documents\Visual Studio 2012\Projects\MicronApplicationSpy\LaunchTracker\obj\Debug\LaunchTracker.exe
 C:\Users\TheRusskiy\Documents\Visual Studio 2012\Projects\MicronApplicationSpy\LaunchTracker\obj\Debug\LaunchTracker.pdb
+C:\Users\TheRusskiy\GIT\LaunchTracker.git\CSharpClient\LaunchTracker\bin\Debug\LaunchTracker.exe.config
+C:\Users\TheRusskiy\GIT\LaunchTracker.git\CSharpClient\LaunchTracker\obj\Debug\LaunchTracker.exe
+C:\Users\TheRusskiy\GIT\LaunchTracker.git\CSharpClient\LaunchTracker\obj\Debug\LaunchTracker.pdb
+C:\Users\TheRusskiy\GIT\LaunchTracker.git\CSharpClient\LaunchTracker\bin\Debug\spy-config.txt
+C:\Users\TheRusskiy\GIT\LaunchTracker.git\CSharpClient\LaunchTracker\bin\Debug\LaunchTracker.exe
+C:\Users\TheRusskiy\GIT\LaunchTracker.git\CSharpClient\LaunchTracker\bin\Debug\LaunchTracker.pdb
+C:\Users\TheRusskiy\GIT\LaunchTracker.git\CSharpClient\LaunchTracker\obj\Debug\LaunchTracker.csprojResolveAssemblyReference.cache
+C:\Users\TheRusskiy\GIT\LaunchTracker.git\CSharpClient\LaunchTracker\bin\Debug\Newtonsoft.Json.dll
+C:\Users\TheRusskiy\GIT\LaunchTracker.git\CSharpClient\LaunchTracker\bin\Debug\Newtonsoft.Json.pdb
+C:\Users\TheRusskiy\GIT\LaunchTracker.git\CSharpClient\LaunchTracker\bin\Debug\Newtonsoft.Json.xml

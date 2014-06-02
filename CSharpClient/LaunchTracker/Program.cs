@@ -7,23 +7,29 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Management;
+using Newtonsoft.Json;
 
 namespace MicronApplicationSpy
 {
     class Program
     {
         private static string machine = null;
-        private static string application = null;
+        private static List<string> applications = new List<string>();
         private static bool debug = false;
         static void Main(string[] args)
         {
-            string[] lines = System.IO.File.ReadAllLines(@"spy-config.txt");
-            machine = lines[0].Trim(" "[0]);
-            application = lines[1].Trim(" "[0]);
-            if (lines.Length >= 3 && lines[2].Trim(" "[0]).Equals("debug"))
+            string text = System.IO.File.ReadAllText(@"spy-config.txt");
+            dynamic json = JsonConvert.DeserializeObject(text);
+            
+            machine = json.machine.Value.Trim(" "[0]);
+            foreach (var app in json.applications)
+            {
+                applications.Add(app.Value);
+            }
+            debug = json.debug.Value;
+            if (debug)
             {
                 Console.WriteLine("Debug mode");
-                debug = true;
             }
             ManagementEventWatcher startWatch = new ManagementEventWatcher(
   new WqlEventQuery("SELECT * FROM Win32_ProcessStartTrace"));
@@ -42,21 +48,24 @@ namespace MicronApplicationSpy
         {
             string processName = (string)e.NewEvent.Properties["ProcessName"].Value;
             Console.WriteLine("Process stopped: {0}", processName);
-            Match match = Regex.Match(processName, @"" + application, RegexOptions.IgnoreCase);
-            if (match.Success)
+            foreach (var application in applications)
             {
-                Console.WriteLine("***Right process stopped!***");
-            }
-            if (match.Success && !debug)
-            {
-                using (var wb = new WebClient())
+                Match match = Regex.Match(processName, @"" + application, RegexOptions.IgnoreCase);
+                if (match.Success)
                 {
-                    var data = new NameValueCollection();
-                    data["machine"] = machine;
-                    data["application"] = application;
+                    Console.WriteLine("***Right process stopped!***");
+                }
+                if (match.Success && !debug)
+                {
+                    using (var wb = new WebClient())
+                    {
+                        var data = new NameValueCollection();
+                        data["machine"] = machine;
+                        data["application"] = application;
 
-                    var response = wb.UploadValues("https://launch-tracker.herokuapp.com/api/application_closed", "POST", data);
-                }    
+                        var response = wb.UploadValues("https://launch-tracker.herokuapp.com/api/application_closed", "POST", data);
+                    }
+                }
             }
         }
 
@@ -64,20 +73,23 @@ namespace MicronApplicationSpy
         {
             string processName = (string) e.NewEvent.Properties["ProcessName"].Value;
             Console.WriteLine("Process started: {0}", processName);
-            Match match = Regex.Match(processName, @"" + application, RegexOptions.IgnoreCase);
-            if (match.Success)
+            foreach (var application in applications)
             {
-                Console.WriteLine("Right process started!");
-            }
-            if (match.Success && !debug)
-            {
-                using (var wb = new WebClient())
+                Match match = Regex.Match(processName, @"" + application, RegexOptions.IgnoreCase);
+                if (match.Success)
                 {
-                    var data = new NameValueCollection();
-                    data["machine"] = machine;
-                    data["application"] = application;
+                    Console.WriteLine("Right process started!");
+                }
+                if (match.Success && !debug)
+                {
+                    using (var wb = new WebClient())
+                    {
+                        var data = new NameValueCollection();
+                        data["machine"] = machine;
+                        data["application"] = application;
 
-                    var response = wb.UploadValues("https://launch-tracker.herokuapp.com/api/application_launched", "POST", data);
+                        var response = wb.UploadValues("https://launch-tracker.herokuapp.com/api/application_launched", "POST", data);
+                    }
                 }
             }
         }
