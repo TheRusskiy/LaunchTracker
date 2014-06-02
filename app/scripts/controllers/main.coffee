@@ -17,7 +17,7 @@ angular.module("radioApp").controller "MainCtrl",
     $scope.format_date = (date)->
       return "-" unless date
       date = new Date(date)
-      date.toLocaleTimeString()
+      date.toLocaleString()
     $scope.time_difference = (from, to)->
       if from and to
         (new Date(to)-new Date(from))/1000 + " sec"
