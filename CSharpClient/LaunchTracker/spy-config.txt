@@ -1,5 +1,6 @@
 ﻿{
 	"machine" : "dmitry_pc",
-	"applications" : ["sublime_text"],
-	"debug" : true
+	"applications" : ["calc.exe"],
+	"worker_id" : 1,
+	"debug" : false
 }

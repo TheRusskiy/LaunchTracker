@@ -19,8 +19,9 @@ namespace MicronApplicationSpy
     class Program
     {
         private static string machine = null;
+        private static int workerId = 0;
         private static List<string> applications = new List<string>();
-        private static List<NameValueCollection> sendQueue = new List<NameValueCollection>();
+        private static List<Dictionary<string, object>> sendQueue = new List<Dictionary<string, object>>();
         private static bool debug = false;
         public static ContextMenu menu;
         public static MenuItem mnuExit;
@@ -34,6 +35,7 @@ namespace MicronApplicationSpy
             dynamic json = JsonConvert.DeserializeObject(text);
 
             machine = json.machine.Value.Trim(" "[0]);
+            workerId = (int)json.worker_id.Value;
             foreach (var app in json.applications)
             {
                 applications.Add(app.Value);
@@ -65,9 +67,9 @@ namespace MicronApplicationSpy
                   {
                       while (true)
                       {
-                          Thread.Sleep(200);
+                          Thread.Sleep(1000);
                           CheckNetwork();
-                          NameValueCollection data = null;
+                          Dictionary<string, object> data = null;
                           while (sendQueue.Count > 0)
                           {
                               data = sendQueue.First();
@@ -106,11 +108,12 @@ namespace MicronApplicationSpy
                 if (match.Success)
                 {
                     Console.WriteLine("***Right process stopped!***");
-                    var data = new NameValueCollection();
-                    data["action"] = "application_closed";
-                    data["machine"] = machine;
-                    data["application"] = application;
-                    data["time"] = NowString();
+                    var data = new Dictionary<string, object>();
+                    data.Add("action", "application_closed");
+                    data.Add("machine", machine);
+                    data.Add("worker_id", workerId);
+                    data.Add("application", application);
+                    data.Add("time", NowString());
                     NotifyService(data);
                 }
             }
@@ -126,17 +129,18 @@ namespace MicronApplicationSpy
                 if (match.Success)
                 {
                     Log("***Right process started!***");
-                    var data = new NameValueCollection();
-                    data["action"] = "application_launched";
-                    data["machine"] = machine;
-                    data["application"] = application;
-                    data["time"] = NowString();
+                    var data = new Dictionary<string, object>();
+                    data.Add("action", "application_launched");
+                    data.Add("machine", machine);
+                    data.Add("worker_id", workerId);
+                    data.Add("application", application);
+                    data.Add("time", NowString());
                     NotifyService(data);
                 }
             }
         }
 
-        static bool NotifyService(NameValueCollection data)
+        static bool NotifyService(Dictionary<string, object> data)
         {
             bool success = false;
             using (var wb = new WebClient())
@@ -145,7 +149,10 @@ namespace MicronApplicationSpy
                 {
                     try
                     {
-                        var response = wb.UploadValues("https://launch-tracker.herokuapp.com/api/" + data["action"], "POST", data);
+                        wb.Headers[HttpRequestHeader.ContentType] = "application/json";
+                        wb.Headers[HttpRequestHeader.Accept] = "application/json";
+                        string json = new System.Web.Script.Serialization.JavaScriptSerializer().Serialize(data);
+                        var response = wb.UploadString("http://vertigo.v-ren.com/api/launches/launches/" + data["action"], "POST", json);
                         Log("Sent to server: "+data.ToString());
                         success = true;
                     }
@@ -164,7 +171,7 @@ namespace MicronApplicationSpy
         {
             DateTime now = DateTime.UtcNow;
             return now.Year + "-" + now.Month.ToString("D2") + "-" + now.Day.ToString("D2") + 
-                "T" + now.Hour.ToString("D2") + ":" + now.Minute.ToString("D2") + ":" + now.Second.ToString("D2");
+                " " + now.Hour.ToString("D2") + ":" + now.Minute.ToString("D2") + ":" + now.Second.ToString("D2");
         }
 
         static void mnuExit_Click(object sender, EventArgs e)
